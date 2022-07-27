@@ -83,7 +83,7 @@ public interface Settings {
 
         SmartNumber SPEED_POWER = new SmartNumber("Feeder Settings/Speed Power", 0.00);
 
-        SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.5);
+        SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.2);
 
         SmartNumber MIN_SPEED = new SmartNumber("Feeder Settings/Min Speed", 0);
 

@@ -25,7 +25,7 @@ public class ShooterSetRPM extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getLeftTrigger())
+        IStream.create(() -> driver.getRightTrigger())
                 .filtered(
                         x -> SLMath.lerp(Settings.Shooter.MIN_SPEED.get(), 
                                           Settings.Shooter.MAX_SPEED.get(), 0),
