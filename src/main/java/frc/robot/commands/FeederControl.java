@@ -11,28 +11,26 @@ import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Settings;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Feeder;
 
-public class ShooterSetRPM extends CommandBase {
-  private final Shooter shooter;
+public class FeederControl extends CommandBase {
+
+  private final Feeder feeder;
   private final Gamepad driver;
   private final IStream commandedSpeed;
 
-
-  /** Creates a new ShooterSetRPM. */
-  public ShooterSetRPM(Shooter shooter, Gamepad driver) {
-    this.shooter = shooter;
+  /** Creates a new FeederControl. */
+  public FeederControl(Feeder feeder, Gamepad driver) {
+    this.feeder = feeder;
     this.driver = driver;
 
     this.commandedSpeed =
         IStream.create(() -> driver.getLeftTrigger())
                 .filtered(
-                        x -> SLMath.lerp(Settings.Shooter.MIN_SPEED.get(), 
-                                          Settings.Shooter.MAX_SPEED.get(), 0),
-                        x -> SLMath.spow(x, Settings.Shooter.SPEED_POWER.get()),
-                        new LowPassFilter(Settings.Shooter.SPEED_FILTER));
-                        
-    addRequirements(shooter);
+                        x -> SLMath.lerp(Settings.Feeder.MIN_SPEED.get(), 
+                                          Settings.Feeder.MAX_SPEED.get(), 0),
+                        x -> SLMath.spow(x, Settings.Feeder.SPEED_POWER.get()),
+                        new LowPassFilter(Settings.Feeder.SPEED_FILTER));
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +40,7 @@ public class ShooterSetRPM extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setRPM(commandedSpeed.get());
+    feeder.setRPM(commandedSpeed.get());
   }
 
   // Called once the command ends or is interrupted.

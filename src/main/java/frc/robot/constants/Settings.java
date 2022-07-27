@@ -1,11 +1,8 @@
 package frc.robot.constants;
 
 
-import com.stuypulse.stuylib.network.SmartBoolean;
+// import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
-import com.stuypulse.stuylib.streams.IStream;
-import com.stuypulse.stuylib.streams.filters.IFilterGroup;
-import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -78,6 +75,32 @@ public interface Settings {
                     (WHEEL_CIRCUMFERENCE / ENCODER_PULSES_PER_REVOLUTION)
                             * GearRatio.ENCODER_TO_WHEEL;
         }
+    }
+
+    public interface Feeder {
+        // Low Pass Filter and deadband for Feeder Controls
+        SmartNumber SPEED_DEADBAND = new SmartNumber("Feeder Settings/Speed Deadband", 0.00);
+
+        SmartNumber SPEED_POWER = new SmartNumber("Feeder Settings/Speed Power", 0.00);
+
+        SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.5);
+
+        SmartNumber MIN_SPEED = new SmartNumber("Feeder Settings/Min Speed", 0);
+
+        SmartNumber SPEED_FILTER = new SmartNumber("Feeder Settings/Speed Filtering", 0.125);
+    }
+
+    public interface Shooter {
+        // Low Pass Filter and deadband for Feeder Controls
+        SmartNumber SPEED_DEADBAND = new SmartNumber("Shooter Settings/Speed Deadband", 0.00);
+
+        SmartNumber SPEED_POWER = new SmartNumber("Shooter Settings/Speed Power", 0.00);
+
+        SmartNumber MAX_SPEED = new SmartNumber("Shooter Settings/Max Speed", 0.5);
+
+        SmartNumber MIN_SPEED = new SmartNumber("Shooter Settings/Min Speed", 0);
+
+        SmartNumber SPEED_FILTER = new SmartNumber("Shooter Settings/Speed Filtering", 0.125);
     }
 
 }

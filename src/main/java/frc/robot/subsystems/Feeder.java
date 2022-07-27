@@ -7,22 +7,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-// import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 
-public class Shooter extends SubsystemBase {
+public class Feeder extends SubsystemBase {
 
-  final WPI_TalonFX topMotor = new WPI_TalonFX(Ports.Shooter.TOP);
-  final WPI_TalonFX bottomMotor = new WPI_TalonFX(Ports.Shooter.BOTTOM);
-
-
-  /** Creates a new Shooter. */
-  public Shooter() {
-    topMotor.configFactoryDefault();
-		bottomMotor.configFactoryDefault();
-
+  final WPI_TalonFX feederMotor = new WPI_TalonFX(Ports.Shooter.FEEDER);
+  /** Creates a new Feeder. */
+  public Feeder() {
+    feederMotor.configFactoryDefault();
 
     // Config closed-loop controls
     /*
@@ -39,34 +33,18 @@ public class Shooter extends SubsystemBase {
                                Settings.Drivetrain.Motion.PID.kD, 
                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
     */
-    topMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
-		bottomMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
-		resetEncoders();
+    feederMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+    resetEncoders();
   }
 
+  
   public void setRPM(Number speed){
-    topMotor.set(ControlMode.PercentOutput, (double) speed);
-		bottomMotor.set(ControlMode.PercentOutput, (double) speed);
+    feederMotor.set(ControlMode.PercentOutput, (double) speed);
+
   }
-
-  public void setRPM(Number topSpeed, Number bottomSpeed){
-    topMotor.set(ControlMode.PercentOutput, (double) topSpeed);
-		bottomMotor.set(ControlMode.PercentOutput, (double) bottomSpeed);
-  }
-
-
-
-  public double getTopVelocity() {
-		return topMotor.getSelectedSensorVelocity();
-	}
-
-	public double getBottomVelocity() {
-		return bottomMotor.getSelectedSensorVelocity();
-	}
 
   public void resetEncoders() {
-		topMotor.setSelectedSensorPosition(0.d);
-		bottomMotor.setSelectedSensorPosition(0.d);
+    feederMotor.setSelectedSensorPosition(0.d);
 	}
 
   @Override

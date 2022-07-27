@@ -4,11 +4,42 @@
 
 package frc.robot.commands;
 
+import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.IStream;
+import com.stuypulse.stuylib.streams.filters.LowPassFilter;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Settings;
+import frc.robot.subsystems.Drivetrain;
 
 public class DrivetrainDrive extends CommandBase {
+  private final Drivetrain drivetrain;
+  private final Gamepad driver;
+
+  private final IStream commandedSpeed, commandedAngle;
+
   /** Creates a new DefaultDrive. */
-  public DrivetrainDrive() {
+  public DrivetrainDrive(Drivetrain drivetrain, Gamepad driver) {
+    this.drivetrain = drivetrain;
+    this.driver = driver;
+
+    this.commandedSpeed =
+        IStream.create(() -> driver.getRightTrigger() - driver.getLeftTrigger())
+                .filtered(
+                        x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
+                        x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
+                        new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
+
+    this.commandedAngle =
+            IStream.create(() -> driver.getLeftX())
+                    .filtered(
+                            x -> SLMath.deadband(x, Settings.Drivetrain.ANGLE_DEADBAND.get()),
+                            x -> SLMath.spow(x, Settings.Drivetrain.ANGLE_POWER.get()),
+                            new LowPassFilter(Settings.Drivetrain.ANGLE_FILTER));
+
+    addRequirements(drivetrain);
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -18,7 +49,13 @@ public class DrivetrainDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (driver.getRawLeftButton()) {
+      drivetrain.arcadeDrive(commandedSpeed.get() - 0.1, commandedAngle.get());
+    } else {
+      drivetrain.curvatureDrive(commandedSpeed.get(), commandedAngle.get());
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
