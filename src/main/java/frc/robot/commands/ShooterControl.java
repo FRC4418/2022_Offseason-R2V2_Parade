@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Settings;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterSetRPM extends CommandBase {
+public class ShooterControl extends CommandBase {
   private final Shooter shooter;
   private final Gamepad driver;
   private final IStream commandedSpeed;
 
 
   /** Creates a new ShooterSetRPM. */
-  public ShooterSetRPM(Shooter shooter, Gamepad driver) {
+  public ShooterControl(Shooter shooter, Gamepad driver) {
     this.shooter = shooter;
     this.driver = driver;
 

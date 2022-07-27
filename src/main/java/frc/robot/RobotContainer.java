@@ -15,8 +15,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AutonHalt;
 import frc.robot.commands.DrivetrainDrive;
 import frc.robot.commands.FeederControl;
-import frc.robot.commands.ShooterSetRPM;
-import frc.robot.commands.ShooterStop;
+import frc.robot.commands.ShooterControl;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -39,7 +38,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver));
-    shooter.setDefaultCommand(new ShooterStop(shooter));
+    shooter.setDefaultCommand(new ShooterControl(shooter, driver));
     feeder.setDefaultCommand(new FeederControl(feeder, driver));
     configureButtonBindings();
   }
@@ -47,7 +46,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    driver.getLeftTriggerButton().whileHeld(new ShooterSetRPM(shooter, driver));
   }
 
   /**
