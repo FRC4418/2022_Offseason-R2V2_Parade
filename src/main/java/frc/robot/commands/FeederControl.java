@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.IStream;
 import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 
@@ -18,6 +19,7 @@ public class FeederControl extends CommandBase {
   private final Feeder feeder;
   private final Gamepad driver;
   private final IStream commandedSpeed;
+  SmartNumber CURRENT_COMMAND_VALUE = new SmartNumber("Feeder current command value", 0);
 
   /** Creates a new FeederControl. */
   public FeederControl(Feeder feeder, Gamepad driver) {
@@ -25,22 +27,28 @@ public class FeederControl extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getLeftTrigger())
+        IStream.create(() -> driver.getRightX())
                 .filtered(
                         x -> SLMath.lerp(Settings.Feeder.MIN_SPEED.get(), 
                                           Settings.Feeder.MAX_SPEED.get(), 0),
                         x -> SLMath.spow(x, Settings.Feeder.SPEED_POWER.get()),
                         new LowPassFilter(Settings.Feeder.SPEED_FILTER));
+    
+    addRequirements(feeder);
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("feeder initialized");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     feeder.setRPM(commandedSpeed.get());
+    CURRENT_COMMAND_VALUE.set(commandedSpeed.get());
   }
 
   // Called once the command ends or is interrupted.

@@ -10,17 +10,17 @@ public interface Ports {
 
     public interface Drivetrain {
         // Motors
-        int LEFT_FRONT = 10;
-        int LEFT_BACK = 11;
+        int LEFT_FRONT = 3;
+        int LEFT_BACK = 2;
 
-        int RIGHT_FRONT = 13;
-        int RIGHT_BACK = 14;
+        int RIGHT_FRONT = 4;
+        int RIGHT_BACK = 5;
     }
 
     public interface Shooter {
         // Motors
-        int TOP = 20;
-        int BOTTOM = 21;
-        int FEEDER = 22;
+        int TOP = 15;
+        int BOTTOM = 1;
+        int FEEDER = 11;
     }
 }

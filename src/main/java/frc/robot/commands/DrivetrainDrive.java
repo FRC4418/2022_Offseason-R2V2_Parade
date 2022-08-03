@@ -25,14 +25,14 @@ public class DrivetrainDrive extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getRightTrigger() - driver.getLeftTrigger())
+        IStream.create(() -> driver.getLeftY())
                 .filtered(
                         x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
                         x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
                         new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
 
     this.commandedAngle =
-            IStream.create(() -> driver.getLeftX())
+            IStream.create(() -> -driver.getLeftX())
                     .filtered(
                             x -> SLMath.deadband(x, Settings.Drivetrain.ANGLE_DEADBAND.get()),
                             x -> SLMath.spow(x, Settings.Drivetrain.ANGLE_POWER.get()),
