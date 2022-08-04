@@ -27,12 +27,14 @@ public class FeederControl extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getRightX())
+        IStream.create(() -> driver.getLeftTrigger())
                 .filtered(
-                        x -> SLMath.lerp(Settings.Feeder.MIN_SPEED.get(), 
-                                          Settings.Feeder.MAX_SPEED.get(), 0),
+                        x -> SLMath.map(x, 0, 1, Settings.Feeder.MIN_SPEED.get(), 
+                                        Settings.Feeder.MAX_SPEED.get()
+                                        ),
                         x -> SLMath.spow(x, Settings.Feeder.SPEED_POWER.get()),
-                        new LowPassFilter(Settings.Feeder.SPEED_FILTER));
+                        new LowPassFilter(Settings.Feeder.SPEED_FILTER)
+                        );
     
     addRequirements(feeder);
     

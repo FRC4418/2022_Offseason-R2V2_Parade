@@ -81,7 +81,7 @@ public interface Settings {
         // Low Pass Filter and deadband for Feeder Controls
         SmartNumber SPEED_DEADBAND = new SmartNumber("Feeder Settings/Speed Deadband", 0.00);
 
-        SmartNumber SPEED_POWER = new SmartNumber("Feeder Settings/Speed Power", 0.00);
+        SmartNumber SPEED_POWER = new SmartNumber("Feeder Settings/Speed Power", 1.0);
 
         SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.2);
 
@@ -94,7 +94,7 @@ public interface Settings {
         // Low Pass Filter and deadband for Feeder Controls
         SmartNumber SPEED_DEADBAND = new SmartNumber("Shooter Settings/Speed Deadband", 0.00);
 
-        SmartNumber SPEED_POWER = new SmartNumber("Shooter Settings/Speed Power", 0.00);
+        SmartNumber SPEED_POWER = new SmartNumber("Shooter Settings/Speed Power", 1.0);
 
         SmartNumber MAX_SPEED = new SmartNumber("Shooter Settings/Max Speed", 0.5);
 

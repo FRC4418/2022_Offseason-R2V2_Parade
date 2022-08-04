@@ -27,8 +27,8 @@ public class ShooterControl extends CommandBase {
     this.commandedSpeed =
         IStream.create(() -> driver.getRightTrigger())
                 .filtered(
-                        x -> SLMath.lerp(Settings.Shooter.MIN_SPEED.get(), 
-                                          Settings.Shooter.MAX_SPEED.get(), 0),
+                        x -> SLMath.map(x, 0, 1, Settings.Shooter.MIN_SPEED.get(), 
+                                        Settings.Shooter.MAX_SPEED.get()),
                         x -> SLMath.spow(x, Settings.Shooter.SPEED_POWER.get()),
                         new LowPassFilter(Settings.Shooter.SPEED_FILTER));
                         
