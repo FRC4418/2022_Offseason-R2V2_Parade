@@ -43,6 +43,7 @@ public class ShooterControl extends CommandBase {
   @Override
   public void execute() {
     shooter.setRPM(commandedSpeed.get());
+    //SmartDashboard.putNumber("Debug/Shooter Setpoint", commandedSpeed.get());
   }
 
   // Called once the command ends or is interrupted.
