@@ -88,7 +88,7 @@
               "_title": "Speed Filtering"
             }
           },
-          "5,1": {
+          "5,0": {
             "size": [
               2,
               1
@@ -97,6 +97,17 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Driver Settings/Max Speed",
               "_title": "Max Speed"
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Driver Settings/Max Speed Angle",
+              "_title": "Max Speed Angle"
             }
           }
         }
