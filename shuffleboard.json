@@ -11,7 +11,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "2,1": {
+          "7,0": {
             "size": [
               2,
               1
@@ -22,7 +22,7 @@
               "_title": "Base Turn Speed"
             }
           },
-          "2,2": {
+          "3,0": {
             "size": [
               2,
               1
@@ -33,7 +33,7 @@
               "_title": "Turn Deadband"
             }
           },
-          "2,3": {
+          "5,0": {
             "size": [
               2,
               1
@@ -66,7 +66,7 @@
               "_title": "Speed Power"
             }
           },
-          "5,2": {
+          "3,2": {
             "size": [
               2,
               1
@@ -77,7 +77,7 @@
               "_title": "Speed Deadband"
             }
           },
-          "5,3": {
+          "5,2": {
             "size": [
               2,
               1
@@ -88,26 +88,34 @@
               "_title": "Speed Filtering"
             }
           },
-          "5,0": {
+          "0,2": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Number Slider",
               "_source0": "network_table:///SmartDashboard/Driver Settings/Max Speed",
-              "_title": "Max Speed"
+              "_title": "Max Speed",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
             }
           },
-          "2,0": {
+          "0,0": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Number Slider",
               "_source0": "network_table:///SmartDashboard/Driver Settings/Max Speed Angle",
-              "_title": "Max Speed Angle"
+              "_title": "Max Turn Speed",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
             }
           }
         }
@@ -146,26 +154,19 @@
               "_title": "Speed Power"
             }
           },
-          "2,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Settings/Max Speed",
-              "_title": "Max Speed"
-            }
-          },
           "2,1": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Settings/Min Speed",
-              "_title": "Min Speed"
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/Shooter Settings/Max Speed",
+              "_title": "Max Speed",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
             }
           },
           "5,1": {
@@ -215,26 +216,19 @@
               "_title": "Speed Power"
             }
           },
-          "2,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Feeder Settings/Max Speed",
-              "_title": "Max Speed"
-            }
-          },
           "2,1": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Feeder Settings/Min Speed",
-              "_title": "Min Speed"
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/Feeder Settings/Max Speed",
+              "_title": "Max Speed",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
             }
           },
           "5,1": {
