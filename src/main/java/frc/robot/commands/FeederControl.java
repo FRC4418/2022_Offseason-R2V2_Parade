@@ -27,7 +27,7 @@ public class FeederControl extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getLeftTrigger())
+        IStream.create(() -> driver.getRightTrigger())
                 .filtered(
                         x -> SLMath.map(x, 0, 1, Settings.Feeder.MIN_SPEED.get(), 
                                         Settings.Feeder.MAX_SPEED.get()

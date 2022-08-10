@@ -39,8 +39,10 @@ public class Shooter extends SubsystemBase {
                                Settings.Drivetrain.Motion.PID.kD, 
                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
     */
-    topMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
-		bottomMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+    topMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+		bottomMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+    topMotor.setInverted(false);
+    bottomMotor.setInverted(true);
 		resetEncoders();
   }
 

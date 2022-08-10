@@ -25,7 +25,7 @@ public class ShooterControl extends CommandBase {
     this.driver = driver;
 
     this.commandedSpeed =
-        IStream.create(() -> driver.getRightTrigger())
+        IStream.create(() -> driver.getLeftTrigger())
                 .filtered(
                         x -> SLMath.map(x, 0, 1, Settings.Shooter.MIN_SPEED.get(), 
                                         Settings.Shooter.MAX_SPEED.get()),
@@ -42,7 +42,7 @@ public class ShooterControl extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setRPM(commandedSpeed.get());
+    shooter.setRPM(-commandedSpeed.get(),commandedSpeed.get());
     //SmartDashboard.putNumber("Debug/Shooter Setpoint", commandedSpeed.get());
   }
 

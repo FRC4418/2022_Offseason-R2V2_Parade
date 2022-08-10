@@ -23,6 +23,9 @@ public interface Settings {
         // Low Pass Filter and deadband for Driver Controls
         SmartNumber SPEED_DEADBAND = new SmartNumber("Driver Settings/Speed Deadband", 0.00);
         SmartNumber ANGLE_DEADBAND = new SmartNumber("Driver Settings/Turn Deadband", 0.00);
+        
+        SmartNumber MAX_SPEED_ANGLE = new SmartNumber("Driver Settings/Max Speed Angle", 0.5);
+        SmartNumber MAX_SPEED = new SmartNumber("Driver Settings/Max Speed", 0.5);
 
         SmartNumber SPEED_POWER = new SmartNumber("Driver Settings/Speed Power", 2.0);
         SmartNumber ANGLE_POWER = new SmartNumber("Driver Settings/Turn Power", 1.0);
@@ -83,11 +86,11 @@ public interface Settings {
 
         SmartNumber SPEED_POWER = new SmartNumber("Feeder Settings/Speed Power", 1.0);
 
-        SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.2);
+        SmartNumber MAX_SPEED = new SmartNumber("Feeder Settings/Max Speed", 0.7);
 
         SmartNumber MIN_SPEED = new SmartNumber("Feeder Settings/Min Speed", 0);
 
-        SmartNumber SPEED_FILTER = new SmartNumber("Feeder Settings/Speed Filtering", 0.125);
+        SmartNumber SPEED_FILTER = new SmartNumber("Feeder Settings/Speed Filtering", 0.03);
     }
 
     public interface Shooter {

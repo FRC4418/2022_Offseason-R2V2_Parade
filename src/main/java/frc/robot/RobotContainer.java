@@ -15,7 +15,9 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.AutonHalt;
 import frc.robot.commands.DrivetrainDrive;
 import frc.robot.commands.FeederControl;
+import frc.robot.commands.FeederReverse;
 import frc.robot.commands.ShooterControl;
+import frc.robot.commands.ShooterReverse;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -45,6 +47,9 @@ public class RobotContainer {
 
 
   private void configureButtonBindings() {
+    driver.getRightBumper().whenHeld(new FeederReverse(feeder));
+    driver.getLeftBumper().whenHeld(new ShooterReverse(shooter));
+
 
   }
 

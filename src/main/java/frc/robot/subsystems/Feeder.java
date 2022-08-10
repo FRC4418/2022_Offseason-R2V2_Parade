@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +35,8 @@ public class Feeder extends SubsystemBase {
                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
     */
     feederMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+    feederMotor.setInverted(true);
+    feederMotor.setNeutralMode(NeutralMode.Brake);
     resetEncoders();
   }
 
