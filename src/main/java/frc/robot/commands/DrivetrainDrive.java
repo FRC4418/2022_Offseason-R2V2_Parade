@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.FilteredIStream;
 import com.stuypulse.stuylib.streams.IStream;
 import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 
@@ -17,22 +18,30 @@ public class DrivetrainDrive extends CommandBase {
   private final Drivetrain drivetrain;
   private final Gamepad driver;
 
-  private final IStream commandedSpeed, commandedAngle;
+  private final IStream leftTriggerSpeed, rightTriggerSpeed, angleSetpoint;
 
   /** Creates a new DefaultDrive. */
   public DrivetrainDrive(Drivetrain drivetrain, Gamepad driver) {
     this.drivetrain = drivetrain;
     this.driver = driver;
 
-    this.commandedSpeed =
-        IStream.create(() -> driver.getLeftY())
+    this.leftTriggerSpeed =
+        IStream.create(() -> driver.getLeftTrigger())
                 .filtered(
                         x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED.get(), Settings.Drivetrain.MAX_SPEED.get()),
                         x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
                         x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
                         new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
 
-    this.commandedAngle =
+    this.rightTriggerSpeed =
+        IStream.create(() -> driver.getRightTrigger())
+                .filtered(
+                        x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED.get(), Settings.Drivetrain.MAX_SPEED.get()),
+                        x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
+                        x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
+                        new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
+
+    this.angleSetpoint =
             IStream.create(() -> -driver.getLeftX())
                     .filtered(
                             x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED_ANGLE.get(), Settings.Drivetrain.MAX_SPEED_ANGLE.get()),
@@ -52,10 +61,11 @@ public class DrivetrainDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (driver.getRawLeftButton()) {
-      drivetrain.arcadeDrive(commandedSpeed.get() - 0.1, commandedAngle.get());
+    // If the reverse trigger is use then invert everything so that the front becomes the back
+    if (driver.getLeftTrigger() > 0.1) {
+      drivetrain.curvatureDrive(-leftTriggerSpeed.get(), -angleSetpoint.get());
     } else {
-      drivetrain.curvatureDrive(commandedSpeed.get(), commandedAngle.get());
+      drivetrain.curvatureDrive(rightTriggerSpeed.get(), angleSetpoint.get());
     }
   }
 
