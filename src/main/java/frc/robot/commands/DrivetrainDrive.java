@@ -63,7 +63,7 @@ public class DrivetrainDrive extends CommandBase {
   public void execute() {
     // If the reverse trigger is use then invert everything so that the front becomes the back
     if (driver.getLeftTrigger() > 0.1) {
-      drivetrain.curvatureDrive(-leftTriggerSpeed.get(), -angleSetpoint.get());
+      drivetrain.curvatureDrive(-leftTriggerSpeed.get(), angleSetpoint.get());
     } else {
       drivetrain.curvatureDrive(rightTriggerSpeed.get(), angleSetpoint.get());
     }
