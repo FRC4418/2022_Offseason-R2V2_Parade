@@ -31,70 +31,50 @@ public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFrontMotor.configFactoryDefault();
-		leftBackMotor.configFactoryDefault();
-		rightFrontMotor.configFactoryDefault();
-		rightBackMotor.configFactoryDefault();
+    leftBackMotor.configFactoryDefault();
+    rightFrontMotor.configFactoryDefault();
+    rightBackMotor.configFactoryDefault();
 
-		leftBackMotor.follow(leftFrontMotor);
-		rightBackMotor.follow(rightFrontMotor);
+    leftBackMotor.follow(leftFrontMotor);
+    rightBackMotor.follow(rightFrontMotor);
 
-    // Config closed-loop controls
-    /*
-    leftFrontMotor.config_kF(Settings.Drivetrain.Motion.PID.kSlot, 
-                               Settings.Drivetrain.Motion.PID.kF, 
-                               Settings.Drivetrain.Motion.PID.kTimeoutMs);
-		leftFrontMotor.config_kP(Settings.Drivetrain.Motion.PID.kSlot, 
-                               Settings.Drivetrain.Motion.PID.kP,
-                               Settings.Drivetrain.Motion.PID.kTimeoutMs);
-		leftFrontMotor.config_kI(Settings.Drivetrain.Motion.PID.kSlot, 
-                               Settings.Drivetrain.Motion.PID.kI, 
-                               Settings.Drivetrain.Motion.PID.kTimeoutMs);
-    leftFrontMotor.config_kD(Settings.Drivetrain.Motion.PID.kSlot, 
-                               Settings.Drivetrain.Motion.PID.kD, 
-                               Settings.Drivetrain.Motion.PID.kTimeoutMs);
+    // Config closed-loop constants
+    leftFrontMotor.config_kF(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kF);
+    leftFrontMotor.config_kP(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kP);
+    leftFrontMotor.config_kI(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kI);
+    leftFrontMotor.config_kD(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kD);
 
-    rightFrontMotor.config_kF(Settings.Drivetrain.Motion.PID.kSlot, 
-                                Settings.Drivetrain.Motion.PID.kF, 
-                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
-		rightFrontMotor.config_kP(Settings.Drivetrain.Motion.PID.kSlot, 
-                                Settings.Drivetrain.Motion.PID.kP, 
-                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
-		rightFrontMotor.config_kI(Settings.Drivetrain.Motion.PID.kSlot, 
-                                Settings.Drivetrain.Motion.PID.kI, 
-                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
-    rightFrontMotor.config_kD(Settings.Drivetrain.Motion.PID.kSlot, 
-                                Settings.Drivetrain.Motion.PID.kD, 
-                                Settings.Drivetrain.Motion.PID.kTimeoutMs);
-		*/
-    
+    rightFrontMotor.config_kF(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kF);
+    rightFrontMotor.config_kP(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kP);
+    rightFrontMotor.config_kI(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kI);
+    rightFrontMotor.config_kD(Settings.Drivetrain.Motion.PID.kSlot, Settings.Drivetrain.Motion.PID.kD);
+
     // Config integrated sensors (built-in encoders)
-		leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
-		rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
-		resetEncoders();
+    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+    resetEncoders();
 
     leftGroup.setInverted(true);
-		rightGroup.setInverted(false);
+    rightGroup.setInverted(false);
   }
 
-
-	// Encoder methods
+  // Encoder methods
   public double getLeftDistance() {
-		return leftFrontMotor.getSelectedSensorPosition() * Encoders.ENCODER_DISTANCE_PER_PULSE;
-	}
+    return leftFrontMotor.getSelectedSensorPosition() * Encoders.ENCODER_DISTANCE_PER_PULSE;
+  }
 
-	public double getRightDistance() {
-		return rightFrontMotor.getSelectedSensorPosition() * Encoders.ENCODER_DISTANCE_PER_PULSE;
-	}
+  public double getRightDistance() {
+    return rightFrontMotor.getSelectedSensorPosition() * Encoders.ENCODER_DISTANCE_PER_PULSE;
+  }
 
-	public double getAverageDistance() {
-		return (getRightDistance() + getLeftDistance()) / 2.0d;
-	}
+  public double getAverageDistance() {
+    return (getRightDistance() + getLeftDistance()) / 2.0d;
+  }
 
-	public void resetEncoders() {
-		leftFrontMotor.setSelectedSensorPosition(0.d);
-		rightFrontMotor.setSelectedSensorPosition(0.d);
-	}
-
+  public void resetEncoders() {
+    leftFrontMotor.setSelectedSensorPosition(0.d);
+    rightFrontMotor.setSelectedSensorPosition(0.d);
+  }
 
   // Stops drivetrain from moving
   public void stop() {
@@ -113,35 +93,66 @@ public class Drivetrain extends SubsystemBase {
 
   // Drives using curvature drive algorithm
   public void curvatureDrive(double xSpeed, double zRotation, double baseTS) {
-      // Clamp all inputs to valid values
-      xSpeed = SLMath.clamp(xSpeed, -1.0, 1.0);
-      zRotation = SLMath.clamp(zRotation, -1.0, 1.0);
-      baseTS = SLMath.clamp(baseTS, 0.0, 1.0);
+    // Clamp all inputs to valid values
+    xSpeed = SLMath.clamp(xSpeed, -1.0, 1.0);
+    zRotation = SLMath.clamp(zRotation, -1.0, 1.0);
+    baseTS = SLMath.clamp(baseTS, 0.0, 1.0);
 
-      // Find the amount to slow down turning by.
-      // This is proportional to the speed but has a base value
-      // that it starts from (allows turning in place)
-      double turnAdj = Math.max(baseTS, Math.abs(xSpeed));
+    // Find the amount to slow down turning by.
+    // This is proportional to the speed but has a base value
+    // that it starts from (allows turning in place)
+    double turnAdj = Math.max(baseTS, Math.abs(xSpeed));
 
-      // Find the speeds of the left and right wheels
-      double lSpeed = xSpeed + zRotation * turnAdj;
-      double rSpeed = xSpeed - zRotation * turnAdj;
+    // Find the speeds of the left and right wheels
+    double lSpeed = xSpeed + zRotation * turnAdj;
+    double rSpeed = xSpeed - zRotation * turnAdj;
 
-      // Find the maximum output of the wheels, so that if a wheel tries to go > 1.0
-      // it will be scaled down proportionally with the other wheels.
-      double scale = Math.max(1.0, Math.max(Math.abs(lSpeed), Math.abs(rSpeed)));
+    // Find the maximum output of the wheels, so that if a wheel tries to go > 1.0
+    // it will be scaled down proportionally with the other wheels.
+    double scale = Math.max(1.0, Math.max(Math.abs(lSpeed), Math.abs(rSpeed)));
 
-      lSpeed /= scale;
-      rSpeed /= scale;
+    lSpeed /= scale;
+    rSpeed /= scale;
 
-      // Feed the inputs to the drivetrain
-      tankDrive(lSpeed, rSpeed);
+    // Feed the inputs to the drivetrain
+    tankDrive(lSpeed, rSpeed);
   }
 
   // Drives using curvature drive algorithm with automatic quick turn
   public void curvatureDrive(double xSpeed, double zRotation) {
-      this.curvatureDrive(xSpeed, zRotation, Settings.Drivetrain.BASE_TURNING_SPEED.get());
+    this.curvatureDrive(xSpeed, zRotation, Settings.Drivetrain.BASE_TURNING_SPEED.get());
   }
+
+  // Drives using curvature drive, but inverts the steering when driving backwards
+  public void impulseDrive(double xSpeed, double zRotation) {
+    // If the speed is negative and the steering setpoint is small, then invert the
+    // steering controls
+    if (xSpeed < -0.05 && zRotation < Settings.Drivetrain.INVERT_ANGLE_THREASHOLD.get()) {
+      curvatureDrive(xSpeed, -zRotation); // Inverted steering
+    } else {
+      curvatureDrive(xSpeed, zRotation); // Standard steering
+    }
+  }
+  /*
+   * Notes on precursor to impulseDrive that was tested at WWW parade
+   * 
+   * Problems:
+   * funny things happen when both triggers are pressed
+   * with turn command given left trigger causes small jerky motions
+   * lowpass filter can be bypassed by pressing both triggers then going into
+   * reverse
+   * 
+   * Ideal solution:
+   * smooth transition in throttle from forword to reverse -> should be handled by
+   * having both triggers on one stream and letting the lowpass sort it out
+   * transition only when the turn rate is small, to ease turning transition ->
+   * handled by invering logic
+   * defined behavor when both triggers are pressed -> handled by merging into one
+   * angle steam
+   * 
+   * Found issues in past parade version:
+   * each trigger was mapped -1 to 1 so the final values were halved
+   */
 
   @Override
   public void periodic() {

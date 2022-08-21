@@ -18,36 +18,29 @@ public class DrivetrainDrive extends CommandBase {
   private final Drivetrain drivetrain;
   private final Gamepad driver;
 
-  private final IStream leftTriggerSpeed, rightTriggerSpeed, angleSetpoint;
+  private final IStream speedSetpoint, angleSetpoint;
 
   /** Creates a new DefaultDrive. */
   public DrivetrainDrive(Drivetrain drivetrain, Gamepad driver) {
     this.drivetrain = drivetrain;
     this.driver = driver;
 
-    this.leftTriggerSpeed =
-        IStream.create(() -> driver.getLeftTrigger())
-                .filtered(
-                        x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED.get(), Settings.Drivetrain.MAX_SPEED.get()),
-                        x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
-                        x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
-                        new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
+    // Gives 1 to -1, and 0 when both triggers are held down
+    // Mapped to symetric max values from shuffleboard
+    this.speedSetpoint = IStream.create(() -> driver.getRightTrigger() - driver.getLeftTrigger())
+        .filtered(
+            x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED.get(), Settings.Drivetrain.MAX_SPEED.get()),
+            x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
+            x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
+            new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
 
-    this.rightTriggerSpeed =
-        IStream.create(() -> driver.getRightTrigger())
-                .filtered(
-                        x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED.get(), Settings.Drivetrain.MAX_SPEED.get()),
-                        x -> SLMath.deadband(x, Settings.Drivetrain.SPEED_DEADBAND.get()),
-                        x -> SLMath.spow(x, Settings.Drivetrain.SPEED_POWER.get()),
-                        new LowPassFilter(Settings.Drivetrain.SPEED_FILTER));
-
-    this.angleSetpoint =
-            IStream.create(() -> -driver.getLeftX())
-                    .filtered(
-                            x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED_ANGLE.get(), Settings.Drivetrain.MAX_SPEED_ANGLE.get()),
-                            x -> SLMath.deadband(x, Settings.Drivetrain.ANGLE_DEADBAND.get()),
-                            x -> SLMath.spow(x, Settings.Drivetrain.ANGLE_POWER.get()),
-                            new LowPassFilter(Settings.Drivetrain.ANGLE_FILTER));
+    this.angleSetpoint = IStream.create(() -> -driver.getLeftX())
+        .filtered(
+            x -> SLMath.map(x, -1, 1, -Settings.Drivetrain.MAX_SPEED_ANGLE.get(),
+                Settings.Drivetrain.MAX_SPEED_ANGLE.get()),
+            x -> SLMath.deadband(x, Settings.Drivetrain.ANGLE_DEADBAND.get()),
+            x -> SLMath.spow(x, Settings.Drivetrain.ANGLE_POWER.get()),
+            new LowPassFilter(Settings.Drivetrain.ANGLE_FILTER));
 
     addRequirements(drivetrain);
 
@@ -56,22 +49,19 @@ public class DrivetrainDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // If the reverse trigger is use then invert everything so that the front becomes the back
-    if (driver.getLeftTrigger() > 0.1) {
-      drivetrain.curvatureDrive(-leftTriggerSpeed.get(), -angleSetpoint.get());
-    } else {
-      drivetrain.curvatureDrive(rightTriggerSpeed.get(), angleSetpoint.get());
-    }
+    drivetrain.impulseDrive(speedSetpoint.get(), angleSetpoint.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
