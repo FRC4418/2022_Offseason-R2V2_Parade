@@ -26,18 +26,15 @@ public class FeederControl extends CommandBase {
     this.feeder = feeder;
     this.driver = driver;
 
-    this.commandedSpeed =
-        IStream.create(() -> driver.getRightTrigger())
-                .filtered(
-                        x -> SLMath.map(x, 0, 1, Settings.Feeder.MIN_SPEED.get(), 
-                                        Settings.Feeder.MAX_SPEED.get()
-                                        ),
-                        x -> SLMath.spow(x, Settings.Feeder.SPEED_POWER.get()),
-                        new LowPassFilter(Settings.Feeder.SPEED_FILTER)
-                        );
-    
+    this.commandedSpeed = IStream.create(() -> driver.getRightTrigger())
+        .filtered(
+            x -> SLMath.map(x, 0, 1, Settings.Feeder.MIN_SPEED.get(),
+                Settings.Feeder.MAX_SPEED.get()),
+            x -> SLMath.spow(x, Settings.Feeder.SPEED_POWER.get()),
+            new LowPassFilter(Settings.Feeder.SPEED_FILTER));
+
     addRequirements(feeder);
-    
+
   }
 
   // Called when the command is initially scheduled.
@@ -55,7 +52,8 @@ public class FeederControl extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
